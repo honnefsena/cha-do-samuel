@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chá do Samuel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#141b24;
+    --bg-2:#1b2430;
+    --card:#202b39;
+    --card-line:#33455a;
+    --ink:#e7eef5;
+    --ink-soft:#9fb2c4;
+    --sky:#7fb0d8;
+    --sky-deep:#a9d0ef;
+    --sky-bg:#243546;
+    --sun:#e8b04b;
+    --rose:#e08a78;
+    --ok:#6fb894;
+    --ok-bg:#1f3a2e;
+    --rose-bg:#3a2422;
+    --shadow:0 16px 50px -20px rgba(0,0,0,.6);
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Nunito Sans',system-ui,sans-serif;
+    background:
+      radial-gradient(900px 500px at 50% -10%, #1e2a38 0%, transparent 70%),
+      var(--bg);
+    color:var(--ink);
+    line-height:1.6;
+    padding:0 0 4rem;
+    min-height:100vh;
+  }
+  .wrap{max-width:620px;margin:0 auto;padding:0 20px}
+
+  .hero{text-align:center;padding:56px 20px 32px;position:relative}
+  .baby-icon{font-size:52px;line-height:1;display:block;margin-bottom:14px}
+  .hero h1{
+    font-family:'Fraunces',Georgia,serif;font-weight:500;
+    font-size:clamp(2.2rem,7vw,3.1rem);letter-spacing:-.01em;
+    color:var(--sky-deep);margin-bottom:6px;
+  }
+  .hero .sub{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:1.15rem;color:var(--ink-soft)}
+  .divider{width:70px;height:2px;margin:24px auto 0;background:linear-gradient(90deg,transparent,var(--sky),transparent);border:0}
+
+  .card{
+    background:var(--card);border:1px solid var(--card-line);
+    border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:26px 24px;margin-top:22px;
+  }
+  .q-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:26px;height:26px;border-radius:50%;background:var(--sky-bg);
+    color:var(--sky-deep);font-weight:700;font-size:.85rem;margin-right:10px;flex:none;
+  }
+  .q-head{display:flex;align-items:center;margin-bottom:16px}
+  .q-head h2{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:1.3rem;color:var(--ink)}
+
+  input[type="text"],input[type="password"]{
+    width:100%;font:inherit;color:var(--ink);padding:13px 15px;
+    border:1.5px solid var(--card-line);border-radius:12px;background:var(--bg-2);transition:border-color .15s;
+  }
+  input[type="text"]:focus,input[type="password"]:focus{outline:none;border-color:var(--sky)}
+  input::placeholder{color:#6b7f92}
+
+  .presence{display:grid;gap:12px}
+  .choice{
+    display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;
+    border:1.5px solid var(--card-line);border-radius:12px;background:var(--bg-2);
+    transition:all .15s;font-weight:600;
+  }
+  .choice input{position:absolute;opacity:0;pointer-events:none}
+  .choice .mark{width:22px;height:22px;border-radius:50%;flex:none;border:2px solid var(--card-line);transition:all .15s;display:grid;place-items:center}
+  .choice.yes:has(input:checked){border-color:var(--ok);background:var(--ok-bg)}
+  .choice.yes:has(input:checked) .mark{border-color:var(--ok);background:var(--ok)}
+  .choice.no:has(input:checked){border-color:var(--rose);background:var(--rose-bg)}
+  .choice.no:has(input:checked) .mark{border-color:var(--rose);background:var(--rose)}
+  .choice:has(input:checked) .mark::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--bg)}
+
+  .gift-intro{color:var(--ink-soft);font-size:.97rem}
+  .gift-intro p{margin-bottom:12px}
+  .gift-intro p:last-child{margin-bottom:0}
+
+  .gifts{margin-top:20px;display:grid;gap:9px}
+  .gift{
+    display:flex;align-items:center;gap:12px;padding:12px 15px;cursor:pointer;
+    border:1.5px solid var(--card-line);border-radius:11px;background:var(--bg-2);transition:all .13s;
+  }
+  .gift:hover:not(.out){border-color:var(--sky)}
+  .gift input{position:absolute;opacity:0;pointer-events:none}
+  .gift .box{width:21px;height:21px;border-radius:6px;flex:none;border:2px solid var(--card-line);transition:all .13s;display:grid;place-items:center}
+  .gift .box::after{content:"";width:11px;height:6px;border-left:2.5px solid var(--bg);border-bottom:2.5px solid var(--bg);transform:rotate(-45deg) scale(0);transition:transform .13s;margin-top:-2px}
+  .gift:has(input:checked){border-color:var(--sky);background:var(--sky-bg)}
+  .gift:has(input:checked) .box{border-color:var(--sky);background:var(--sky)}
+  .gift:has(input:checked) .box::after{transform:rotate(-45deg) scale(1)}
+  .gift .name{flex:1;font-weight:600;font-size:.98rem}
+  .gift .qty{font-size:.78rem;font-weight:700;color:var(--sky-deep);background:var(--sky-bg);padding:3px 10px;border-radius:20px;flex:none;white-space:nowrap}
+  .gift .qty.low{color:var(--sun);background:#3a2f18}
+  .gift.out{opacity:.45;cursor:not-allowed}
+  .gift.out .qty{color:var(--rose);background:var(--rose-bg)}
+  .gift.other .name{color:var(--ink-soft);font-style:italic}
+  .other-input{margin-top:9px;display:none}
+  .other-input.show{display:block}
+
+  .submit-wrap{margin-top:26px;text-align:center}
+  button.send{
+    font:inherit;font-weight:700;font-size:1.05rem;color:var(--bg);
+    background:var(--sky);border:0;border-radius:14px;padding:15px 42px;cursor:pointer;
+    box-shadow:0 8px 24px -8px var(--sky);transition:transform .12s,background .15s;
+  }
+  button.send:hover{background:var(--sky-deep);transform:translateY(-1px)}
+  button.send:active{transform:translateY(0)}
+  button.send:disabled{opacity:.55;cursor:default;transform:none}
+  .err{color:var(--rose);font-weight:600;font-size:.9rem;margin-top:12px;min-height:1.2em}
+
+  .thanks{display:none;text-align:center}
+  .thanks.show{display:block;animation:rise .5s ease}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .thanks .big{font-size:56px;margin-bottom:10px}
+  .thanks h2{font-family:'Fraunces',serif;font-weight:500;font-size:1.7rem;color:var(--sky-deep);margin-bottom:8px}
+  .thanks p{color:var(--ink-soft);max-width:380px;margin:0 auto 20px}
+  .thanks .again{font:inherit;font-weight:600;color:var(--sky-deep);background:none;border:1.5px solid var(--card-line);border-radius:11px;padding:10px 22px;cursor:pointer}
+  .thanks .again:hover{border-color:var(--sky)}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+  <header class="hero">
+    <span class="baby-icon">🍼</span>
+    <h1>Chá do Samuel</h1>
+    <span class="sub">estamos esperando por você</span>
+    <hr class="divider">
+  </header>
+
+  <main class="wrap" id="form">
+    <section class="card">
+      <div class="q-head"><span class="q-num">1</span><h2>Seu nome</h2></div>
+      <label><input type="text" id="nome" placeholder="Como podemos te chamar?" autocomplete="name"></label>
+    </section>
+
+    <section class="card">
+      <div class="q-head"><span class="q-num">2</span><h2>Você poderá vir?</h2></div>
+      <div class="presence">
+        <label class="choice yes"><input type="radio" name="presenca" value="sim"><span class="mark"></span><span>✅ Sim, estarei lá!</span></label>
+        <label class="choice no"><input type="radio" name="presenca" value="nao"><span class="mark"></span><span>❌ Infelizmente não poderei ir</span></label>
+      </div>
+    </section>
+
+    <section class="card" id="gift-card">
+      <div class="q-head"><span class="q-num">3</span><h2>Sobre os presentes</h2></div>
+      <div class="gift-intro">
+        <p>Preparamos uma pequena lista de sugestões para quem gostaria de nos presentear, mas está em dúvida sobre o que escolher para o Samuel. Ela é apenas uma forma de facilitar a organização, não é obrigatória!</p>
+        <p>Se você já tem algo em mente, quer escolher outro presente ou prefere levar aquilo que sentir no coração, fique totalmente à vontade. 🥰</p>
+        <p>Os números ao lado mostram quantos ainda faltam de cada item, assim a gente evita repetir e falta. 💙</p>
+      </div>
+      <div class="gifts" id="gifts"></div>
+      <div class="other-input" id="other-wrap"><input type="text" id="other-text" placeholder="Conte pra gente o que você vai levar 💙"></div>
+    </section>
+
+    <div class="submit-wrap">
+      <button class="send" id="send">Enviar confirmação</button>
+      <div class="err" id="err"></div>
+    </div>
+  </main>
+
+  <section class="wrap thanks" id="thanks">
+    <div class="card">
+      <div class="big">💙</div>
+      <h2>Recebido com carinho!</h2>
+      <p id="thanks-msg"></p>
+      <button class="again" id="again">Enviar outra resposta</button>
+    </div>
+  </section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://zkhtiezplubzjpaxdanq.supabase.co";
+const SUPABASE_KEY = "sb_publishable_3bayYs-rmK-ZXzZF-08BNA_3UvnmCNM";
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const giftsEl=document.getElementById('gifts');
+
+// Postgres doesn't guarantee row order without ORDER BY, and reservar() updates
+// rows on every reserve, so we pin the display order here instead of trusting the query.
+const GIFT_ORDER = [
+  "Fraldas RN","Fraldas P","Fraldas M","Fraldas G","Fralda XG","Lenços umedecidos",
+  "Sabonete líquido","Shampoo","Escova e pente","Pomada para assaduras","Higiene / banho",
+  "Roupinha RN","Roupinha P","Roupinha M","Roupinha G","Pomada Bepantol","Toalha de banho",
+  "Fralda de boca",
+];
+
+async function loadEstoque(){
+  const {data,error}=await db.from('estoque').select('item,total,reservados');
+  if(error){
+    console.error(error);
+    return [];
+  }
+  return data.sort((a,b)=>{
+    const ia=GIFT_ORDER.indexOf(a.item), ib=GIFT_ORDER.indexOf(b.item);
+    if(ia===-1 && ib===-1) return a.item.localeCompare(b.item);
+    if(ia===-1) return 1;
+    if(ib===-1) return -1;
+    return ia-ib;
+  });
+}
+
+function renderGifts(estoque){
+  giftsEl.innerHTML='';
+  estoque.forEach(g=>{
+    const total=g.total;
+    const reservados=g.reservados||0;
+    const remaining = total==null ? null : Math.max(0,total-reservados);
+    const isOut = remaining===0;
+    const l=document.createElement('label');
+    l.className='gift'+(isOut?' out':'');
+    let qtyHtml='';
+    if(total!=null){
+      const cls = remaining<=2 && remaining>0 ? 'qty low' : 'qty';
+      qtyHtml = isOut ? `<span class="qty">esgotado</span>` : `<span class="${cls}">faltam ${remaining}</span>`;
+    }
+    l.innerHTML=`<input type="checkbox" value="${g.item}" ${isOut?'disabled':''}>
+      <span class="box"></span><span class="name">${g.item}</span>${qtyHtml}`;
+    giftsEl.appendChild(l);
+  });
+  const other=document.createElement('label');
+  other.className='gift other';
+  other.innerHTML=`<input type="checkbox" id="other-check"><span class="box"></span><span class="name">Outro item</span>`;
+  giftsEl.appendChild(other);
+
+  const otherWrap=document.getElementById('other-wrap');
+  document.getElementById('other-check').addEventListener('change',e=>{
+    otherWrap.classList.toggle('show',e.target.checked);
+    if(!e.target.checked) document.getElementById('other-text').value='';
+  });
+}
+
+loadEstoque().then(renderGifts);
+
+const sendBtn=document.getElementById('send'),errEl=document.getElementById('err');
+sendBtn.addEventListener('click', async ()=>{
+  const nome=document.getElementById('nome').value.trim();
+  const presenca=document.querySelector('input[name="presenca"]:checked');
+  errEl.textContent='';
+  if(!nome){errEl.textContent='Por favor, escreva seu nome 🙂';return}
+  if(!presenca){errEl.textContent='Você poderá vir ao chá? Marque uma opção.';return}
+
+  const gifts=[...document.querySelectorAll('#gifts input[type=checkbox]:checked')]
+    .filter(c=>c.id!=='other-check').map(c=>c.value);
+  const otherText=document.getElementById('other-text').value.trim();
+  if(document.getElementById('other-check').checked && otherText) gifts.push('Outro: '+otherText);
+
+  sendBtn.disabled=true;sendBtn.textContent='Enviando…';
+
+  const {error}=await db.rpc('reservar',{
+    p_nome:nome,
+    p_presenca:presenca.value,
+    p_presentes:gifts,
+  });
+  if(error){
+    console.error(error);
+    sendBtn.disabled=false;sendBtn.textContent='Enviar confirmação';
+    errEl.textContent='Ops, sua resposta não foi salva. Tente novamente em instantes 💙';
+    return;
+  }
+  showThanks(presenca.value);
+});
+
+function showThanks(p){
+  document.getElementById('form').style.display='none';
+  const t=document.getElementById('thanks');
+  document.getElementById('thanks-msg').textContent = p==='sim'
+    ? 'Que alegria! Mal podemos esperar para celebrar o Samuel com você. 💙'
+    : 'Sentiremos sua falta, mas obrigado por avisar com carinho. 💙';
+  t.classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('again').addEventListener('click',()=>location.reload());
+</script>
+</body>
+</html>
