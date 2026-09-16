@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel — Chá do Samuel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#141b24;
+    --bg-2:#1b2430;
+    --card:#202b39;
+    --card-line:#33455a;
+    --ink:#e7eef5;
+    --ink-soft:#9fb2c4;
+    --sky:#7fb0d8;
+    --sky-deep:#a9d0ef;
+    --sky-bg:#243546;
+    --sun:#e8b04b;
+    --rose:#e08a78;
+    --ok:#6fb894;
+    --ok-bg:#1f3a2e;
+    --rose-bg:#3a2422;
+    --shadow:0 16px 50px -20px rgba(0,0,0,.6);
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Nunito Sans',system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.6;
+    min-height:100vh;
+  }
+  h1{font-family:'Fraunces',Georgia,serif;font-weight:500;color:var(--sky-deep)}
+  h2{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:1.1rem;color:var(--ink);margin-bottom:12px}
+  .sub{color:var(--ink-soft);font-size:.92rem}
+
+  [hidden]{display:none!important}
+
+  /* ---- loading ---- */
+  #loading-view{min-height:100vh;display:flex;align-items:center;justify-content:center;color:var(--ink-soft)}
+
+  /* ---- login ---- */
+  #login-view{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .login-card{
+    width:100%;max-width:340px;background:var(--card);border:1px solid var(--card-line);
+    border-radius:var(--radius);box-shadow:var(--shadow);padding:28px 26px;
+  }
+  .login-card h1{font-size:1.5rem;margin-bottom:4px}
+  .login-card .sub{margin-bottom:22px}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:.82rem;color:var(--ink-soft);margin-bottom:6px}
+  input[type="email"],input[type="password"]{
+    width:100%;font:inherit;color:var(--ink);padding:11px 13px;
+    border:1.5px solid var(--card-line);border-radius:10px;background:var(--bg-2);transition:border-color .15s;
+  }
+  input[type="email"]:focus,input[type="password"]:focus{outline:none;border-color:var(--sky)}
+  input::placeholder{color:#6b7f92}
+  button{font:inherit;cursor:pointer}
+  .btn-primary{
+    width:100%;font-weight:700;color:var(--bg);background:var(--sky);border:0;
+    border-radius:11px;padding:12px;margin-top:6px;transition:background .15s;
+  }
+  .btn-primary:hover{background:var(--sky-deep)}
+  .btn-primary:disabled{opacity:.55;cursor:default}
+  .btn-secondary{
+    font-weight:600;color:var(--sky-deep);background:none;border:1.5px solid var(--card-line);
+    border-radius:10px;padding:9px 16px;
+  }
+  .btn-secondary:hover{border-color:var(--sky)}
+  .err{color:var(--rose);font-weight:600;font-size:.85rem;margin-top:12px;min-height:1.2em}
+
+  /* ---- dashboard ---- */
+  #dashboard-view{max-width:680px;margin:0 auto;padding:36px 20px 70px}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:28px}
+
+  .stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px}
+  .stat{flex:1;min-width:96px;background:var(--card);border:1px solid var(--card-line);border-radius:12px;padding:16px;text-align:center}
+  .stat .n{font-family:'Fraunces',serif;font-size:1.8rem;color:var(--sky-deep);line-height:1}
+  .stat .l{font-size:.78rem;color:var(--ink-soft);margin-top:4px}
+
+  section{margin-bottom:30px}
+  .section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .section-head h2{margin-bottom:0}
+
+  .stock-list{display:grid;gap:7px}
+  .stock-row{
+    display:flex;justify-content:space-between;gap:10px;padding:10px 14px;
+    background:var(--card);border:1px solid var(--card-line);border-radius:10px;font-size:.9rem;
+  }
+  .stock-row .n{color:var(--ink-soft);white-space:nowrap}
+  .stock-row.low .n{color:var(--sun)}
+  .stock-row.out .n{color:var(--rose)}
+
+  .guest-list{background:var(--card);border:1px solid var(--card-line);border-radius:var(--radius);padding:6px 18px}
+  .guest{padding:13px 0;border-bottom:1px solid var(--card-line)}
+  .guest:last-child{border-bottom:0}
+  .guest .name{font-weight:700}
+  .guest .tag{font-size:.75rem;padding:2px 9px;border-radius:20px;margin-left:8px}
+  .guest .tag.sim{background:var(--ok-bg);color:var(--ok)}
+  .guest .tag.nao{background:var(--rose-bg);color:var(--rose)}
+  .guest .gifts{color:var(--ink-soft);font-size:.85rem;margin-top:4px}
+  .guest .when{color:var(--ink-soft);font-size:.72rem;margin-top:3px;opacity:.8}
+
+  .empty{color:var(--ink-soft);font-style:italic;padding:16px 0}
+</style>
+</head>
+<body>
+
+  <div id="loading-view">Carregando…</div>
+
+  <div id="login-view" hidden>
+    <div class="login-card">
+      <h1>Painel</h1>
+      <p class="sub">Chá do Samuel — acesso restrito</p>
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" placeholder="voce@email.com" autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="password">Senha</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn-primary" id="login-btn">Entrar</button>
+      <div class="err" id="login-err"></div>
+    </div>
+  </div>
+
+  <div id="dashboard-view" hidden>
+    <div class="top">
+      <div>
+        <h1>Painel do Chá</h1>
+        <p class="sub">Resultados do Samuel</p>
+      </div>
+      <button class="btn-secondary" id="logout-btn">Sair</button>
+    </div>
+
+    <div class="stat-row" id="stats"></div>
+
+    <section>
+      <h2>Estoque</h2>
+      <div class="stock-list" id="stock"></div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Convidados</h2>
+        <button class="btn-secondary" id="export-btn">⬇ Exportar CSV</button>
+      </div>
+      <div class="guest-list" id="guests"></div>
+    </section>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://zkhtiezplubzjpaxdanq.supabase.co";
+const SUPABASE_KEY = "sb_publishable_3bayYs-rmK-ZXzZF-08BNA_3UvnmCNM";
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Same pinned order as index.html — Postgres doesn't guarantee row order without ORDER BY.
+const GIFT_ORDER = [
+  "Fraldas RN","Fraldas P","Fraldas M","Fraldas G","Fralda XG","Lenços umedecidos",
+  "Sabonete líquido","Shampoo","Escova e pente","Pomada para assaduras","Higiene / banho",
+  "Roupinha RN","Roupinha P","Roupinha M","Roupinha G","Pomada Bepantol","Toalha de banho",
+  "Fralda de boca",
+];
+
+const loadingView=document.getElementById('loading-view');
+const loginView=document.getElementById('login-view');
+const dashView=document.getElementById('dashboard-view');
+const emailEl=document.getElementById('email');
+const passEl=document.getElementById('password');
+const loginBtn=document.getElementById('login-btn');
+const loginErr=document.getElementById('login-err');
+
+let currentRsvp=[];
+
+function esc(s){return String(s).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}
+
+async function doLogin(){
+  loginErr.textContent='';
+  const email=emailEl.value.trim();
+  const password=passEl.value;
+  if(!email||!password){loginErr.textContent='Preencha e-mail e senha.';return}
+  loginBtn.disabled=true;loginBtn.textContent='Entrando…';
+  const {error}=await db.auth.signInWithPassword({email,password});
+  loginBtn.disabled=false;loginBtn.textContent='Entrar';
+  if(error){loginErr.textContent='E-mail ou senha incorretos.';return}
+  passEl.value='';
+}
+loginBtn.addEventListener('click',doLogin);
+passEl.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+emailEl.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+
+document.getElementById('logout-btn').addEventListener('click',()=>db.auth.signOut());
+
+db.auth.onAuthStateChange((_event,session)=>{
+  loadingView.hidden=true;
+  if(session){
+    loginView.hidden=true;
+    dashView.hidden=false;
+    refreshDashboard();
+  }else{
+    dashView.hidden=true;
+    loginView.hidden=false;
+  }
+});
+
+async function loadRsvp(){
+  let {data,error}=await db.from('rsvp').select('*').order('created_at',{ascending:false});
+  if(error){
+    const fallback=await db.from('rsvp').select('*');
+    if(!fallback.error){data=(fallback.data||[]).reverse();error=null}
+  }
+  if(error){console.error(error);return []}
+  return data||[];
+}
+
+async function loadEstoque(){
+  const {data,error}=await db.from('estoque').select('item,total,reservados');
+  if(error){console.error(error);return []}
+  return data.sort((a,b)=>{
+    const ia=GIFT_ORDER.indexOf(a.item),ib=GIFT_ORDER.indexOf(b.item);
+    if(ia===-1&&ib===-1) return a.item.localeCompare(b.item);
+    if(ia===-1) return 1;
+    if(ib===-1) return -1;
+    return ia-ib;
+  });
+}
+
+async function refreshDashboard(){
+  const [rsvp,estoque]=await Promise.all([loadRsvp(),loadEstoque()]);
+  currentRsvp=rsvp;
+  renderStats(rsvp);
+  renderStock(estoque);
+  renderGuests(rsvp);
+}
+
+function renderStats(rsvp){
+  const vao=rsvp.filter(r=>r.presenca==='sim').length;
+  const naoVao=rsvp.filter(r=>r.presenca==='nao').length;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><div class="n">${rsvp.length}</div><div class="l">respostas</div></div>
+    <div class="stat"><div class="n">${vao}</div><div class="l">vão</div></div>
+    <div class="stat"><div class="n">${naoVao}</div><div class="l">não vão</div></div>
+  `;
+}
+
+function renderStock(estoque){
+  const el=document.getElementById('stock');
+  if(!estoque.length){el.innerHTML='<div class="empty">Sem itens no estoque.</div>';return}
+  el.innerHTML=estoque.map(g=>{
+    const total=g.total,reservados=g.reservados||0;
+    if(total==null){
+      return `<div class="stock-row"><span>${esc(g.item)}</span><span class="n">${reservados} reservado(s)</span></div>`;
+    }
+    const remaining=Math.max(0,total-reservados);
+    const cls=remaining===0?'out':(remaining<=2?'low':'');
+    const label=remaining===0?'esgotado':`faltam ${remaining} de ${total}`;
+    return `<div class="stock-row ${cls}"><span>${esc(g.item)}</span><span class="n">${label}</span></div>`;
+  }).join('');
+}
+
+function renderGuests(rsvp){
+  const el=document.getElementById('guests');
+  if(!rsvp.length){el.innerHTML='<div class="empty">Ninguém respondeu ainda.</div>';return}
+  el.innerHTML=rsvp.map(r=>{
+    const gifts=(r.presentes||[]).join(', ')||'nenhum item';
+    const when=r.created_at?new Date(r.created_at).toLocaleString('pt-BR'):'';
+    return `<div class="guest">
+      <span class="name">${esc(r.nome)}</span>
+      <span class="tag ${r.presenca}">${r.presenca==='sim'?'vai':'não vai'}</span>
+      <div class="gifts">🎁 ${esc(gifts)}</div>
+      ${when?`<div class="when">${when}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('export-btn').addEventListener('click',()=>{
+  const rows=[['Nome','Presença','Presentes','Data']];
+  currentRsvp.forEach(r=>rows.push([
+    r.nome,
+    r.presenca==='sim'?'Vai':'Não vai',
+    (r.presentes||[]).join(' | '),
+    r.created_at?new Date(r.created_at).toLocaleString('pt-BR'):'',
+  ]));
+  const csv='﻿'+rows.map(row=>row.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='cha-do-samuel.csv';a.click();
+  URL.revokeObjectURL(url);
+});
+</script>
+</body>
+</html>
